@@ -6,6 +6,10 @@
     describe('identity', function() {
       var uniqueObject = {};
 
+      _.identity = function(newValue){
+        return newValue;
+      };
+
       it('should return whatever value is passed into it', function() {
         expect(_.identity(1)).to.equal(1);
         expect(_.identity('string')).to.equal('string');
@@ -13,7 +17,6 @@
         expect(_.identity(uniqueObject)).to.equal(uniqueObject);
       });
     });
-
     describe('first', function() {
       it('should be able to pull out the first element of an array', function() {
         expect(_.first([1,2,3])).to.equal(1);
@@ -33,6 +36,26 @@
     });
 
     describe('last', function() {
+
+      _.last = function(newArray, index){
+        if(index === undefined){
+          return newArray.pop();
+        }
+        else if (index === 0){
+          return [];
+        }
+        else if (newArray.length <= index){
+          return newArray;
+        }
+        else{
+          var array2 = [];
+          for (var x = 0; x < index; x++){
+            array2.unshift(newArray.pop());
+          }
+          return array2;
+        }
+      };
+
       it('should pull the last element from an array', function() {
         expect(_.last([1,2,3])).to.equal(3);
       });
@@ -55,6 +78,19 @@
         var animals = ['ant', 'bat', 'cat'];
         var iterationInputs = [];
 
+        _.each = function(newIterable, newFunction) {
+          if (Array.isArray(newIterable)) {
+            var count = newIterable.length;
+            for (var x = 0; x < count; x++) {
+              newFunction(newIterable[x], x, newIterable);
+            }
+          }
+          else{
+            for (var key in newIterable){
+              newFunction(newIterable[key], key, newIterable);
+            }
+          }
+        };
         _.each(animals, function(animal, index, list) {
           iterationInputs.push([animal, index, list]);
         });
@@ -126,6 +162,18 @@
     });
 
     describe('filter', function() {
+
+      _.filter = function(newArray, newFunction){
+        var array2 = [];
+        var count = newArray.length;
+        for (var x=0; x < count; x++){
+          if (newFunction(newArray[x]) === true){
+            array2.push(newArray[x]);
+          }
+        }
+        return array2;
+      };
+
       it('should return all even numbers in an array', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var evens = _.filter([1, 2, 3, 4, 5, 6], isEven);
@@ -150,6 +198,18 @@
     });
 
     describe('reject', function() {
+
+      _.reject = function(newArray, newFunction){
+        var array2 = [];
+        var count = newArray.length;
+        for (var x=0; x < count; x++){
+          if (newFunction(newArray[x]) === false){
+            array2.push(newArray[x]);
+          }
+        }
+        return array2;
+      };
+
       it('should reject all even numbers', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var odds = _.reject([1, 2, 3, 4, 5, 6], isEven);
@@ -174,6 +234,33 @@
     });
 
     describe('uniq', function() {
+
+      _.uniq = function(newArray, bool, iterator){
+        var array2 = [],
+            count = newArray.length;
+
+        if(arguments.length > 1){
+          while(bool){
+            var x = 0;
+            if(array2.indexOf(newArray[x]) === -1){
+              array2.push(newArray[x]);
+            }
+            iterator(x);
+            if (x>count){
+              bool = false;
+            }
+          }
+        }
+        else{
+          for (var y= 0; y < count; y++){
+            if(array2.indexOf(newArray[y]) === -1){
+              array2.push(newArray[y]);
+            }
+          }
+          return array2;
+        }
+      };
+
       it('should return all unique values contained in an unsorted array', function() {
         var numbers = [1, 2, 1, 3, 1, 4];
 
