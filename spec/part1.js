@@ -236,29 +236,26 @@
     describe('uniq', function() {
 
       _.uniq = function(newArray, bool, iterator){
-        var array2 = [],
-            count = newArray.length;
+        var array2 = [];
+        var count = newArray.length;
 
-        if(arguments.length > 1){
-          while(bool){
-            var x = 0;
-            if(array2.indexOf(newArray[x]) === -1){
-              array2.push(newArray[x]);
-            }
-            iterator(x);
-            if (x>count){
-              bool = false;
+        if(bool){
+          var newValue = -10000;
+          for (var x = 0; x<count; x++){
+            if(newArray[x] > newValue){
+              newValue = newArray[x];
+              array2.push(newValue);
             }
           }
         }
         else{
-          for (var y= 0; y < count; y++){
+          for (var y = 0; y < count; y++){
             if(array2.indexOf(newArray[y]) === -1){
               array2.push(newArray[y]);
             }
           }
-          return array2;
         }
+        return array2;
       };
 
       it('should return all unique values contained in an unsorted array', function() {
@@ -283,6 +280,15 @@
     });
 
     describe('map', function() {
+
+      _.map = function(newArray, newFunc){
+        var array2 = [],
+            count = newArray.length;
+        for (var x= 0; x < count; x++){
+          array2.push(newFunc(newArray[x]));
+        }
+        return array2;
+      };
       it('should apply a function to every value in an array', function() {
         var doubledNumbers = _.map([1, 2, 3], function(num) {
           return num * 2;
@@ -302,6 +308,18 @@
     });
 
     describe('pluck', function() {
+
+      _.pluck = function(newArray, newString){
+        var array2 = [],
+            count = newArray.length;
+        for (var x=0; x < count; x++){
+          if (newArray[x][newString] !== undefined){
+            array2.push(newArray[x][newString]);
+          }
+        }
+        return array2;
+      };
+
       it('should return values contained at a user-defined property', function() {
         var people = [
           { name: 'moe', age: 30 },
@@ -324,6 +342,29 @@
     });
 
     describe('reduce', function() {
+
+      _.reduce = function(newArray, newFunc, index){
+        var newIndex = index;
+        var count = newArray.length;
+        if (newIndex === undefined){
+          newIndex = 0;
+        }
+        var value;
+        if(index === undefined){
+          value = newArray[newIndex];
+          for(var x=newIndex+1; x < count; x++){
+            value = newFunc(value, newArray[x]);
+          }
+        }
+        else{
+          value = 0;
+          for(var y=newIndex; y < count; y++){
+            value = newFunc(value, newArray[y]);
+          }
+        }
+        return value;
+      };
+
       it('should be able to sum up an array', function() {
         var add = function(tally, item) {return tally + item; };
         var total = _.reduce([1, 2, 3], add, 0);
