@@ -2,26 +2,6 @@
   'use strict';
 
   describe('Part II', function() {
-
-    _.contains = function(newObj, newValue){
-      if (newObj.constructor === Array){
-        for (var x = 0, count = newObj.length; x < count; x++){
-          if(newObj[x] === newValue){
-            return true;
-          }
-        }
-        return false;
-      }
-      else {
-        for (var key in newObj) {
-          if (key === newValue || newObj[key] === newValue) {
-            return true;
-          }
-        }
-        return false;
-      }
-    };
-
     describe('contains', function() {
       it('should return false if a collection does not contain a user-specified value', function() {
         expect(_.contains([4, 5, 6], 2)).to.be.false;
@@ -40,28 +20,6 @@
       var isEven = function(num) {
         return num % 2 === 0;
       };
-      _.every = function(newArray, newFunc){
-        var func;
-        if(newFunc === undefined){
-          func = _.identity;
-        }
-        else{
-          func = newFunc;
-        }
-        if (newArray == []){
-          return true;
-        }
-        else{
-          for(var x = 0, count = newArray.length; x < count; x++){
-            if (func(newArray[x]) == false || func(newArray[x]) == undefined){
-              return false;
-            }
-          }
-          return true;
-        }
-      };
-
-
       it('passes by default for an empty collection', function() {
         expect(_.every([], _.identity)).to.be.true;
       });
@@ -104,7 +62,6 @@
       var isEven = function(number){
         return number % 2 === 0;
       };
-
       it('should fail by default for an empty collection', function() {
         expect(_.some([])).to.be.false;
       });
@@ -251,7 +208,6 @@
 
     describe('memoize', function() {
       var add, memoAdd;
-
       beforeEach(function() {
         add = function(a, b) {
           return a + b;

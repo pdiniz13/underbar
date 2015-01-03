@@ -5,11 +5,6 @@
 
     describe('identity', function() {
       var uniqueObject = {};
-
-      _.identity = function(newValue){
-        return newValue;
-      };
-
       it('should return whatever value is passed into it', function() {
         expect(_.identity(1)).to.equal(1);
         expect(_.identity('string')).to.equal('string');
@@ -36,26 +31,6 @@
     });
 
     describe('last', function() {
-
-      _.last = function(newArray, index){
-        if(index === undefined){
-          return newArray.pop();
-        }
-        else if (index === 0){
-          return [];
-        }
-        else if (newArray.length <= index){
-          return newArray;
-        }
-        else{
-          var array2 = [];
-          for (var x = 0; x < index; x++){
-            array2.unshift(newArray.pop());
-          }
-          return array2;
-        }
-      };
-
       it('should pull the last element from an array', function() {
         expect(_.last([1,2,3])).to.equal(3);
       });
@@ -77,20 +52,6 @@
       it('should iterate over arrays, providing access to the element, index, and array itself', function() {
         var animals = ['ant', 'bat', 'cat'];
         var iterationInputs = [];
-
-        _.each = function(newIterable, newFunction) {
-          if (Array.isArray(newIterable)) {
-            var count = newIterable.length;
-            for (var x = 0; x < count; x++) {
-              newFunction(newIterable[x], x, newIterable);
-            }
-          }
-          else{
-            for (var key in newIterable){
-              newFunction(newIterable[key], key, newIterable);
-            }
-          }
-        };
         _.each(animals, function(animal, index, list) {
           iterationInputs.push([animal, index, list]);
         });
@@ -162,18 +123,6 @@
     });
 
     describe('filter', function() {
-
-      _.filter = function(newArray, newFunction){
-        var array2 = [];
-        var count = newArray.length;
-        for (var x=0; x < count; x++){
-          if (newFunction(newArray[x]) === true){
-            array2.push(newArray[x]);
-          }
-        }
-        return array2;
-      };
-
       it('should return all even numbers in an array', function() {
         var isEven = function(num) { return num % 2 === 0; };
         var evens = _.filter([1, 2, 3, 4, 5, 6], isEven);
@@ -198,7 +147,6 @@
     });
 
     describe('reject', function() {
-
       _.reject = function(newArray, newFunction){
         var array2 = [];
         var count = newArray.length;
@@ -234,30 +182,6 @@
     });
 
     describe('uniq', function() {
-
-      _.uniq = function(newArray, bool, iterator){
-        var array2 = [];
-        var count = newArray.length;
-
-        if(bool){
-          var newValue = -10000;
-          for (var x = 0; x<count; x++){
-            if(newArray[x] > newValue){
-              newValue = newArray[x];
-              array2.push(newValue);
-            }
-          }
-        }
-        else{
-          for (var y = 0; y < count; y++){
-            if(array2.indexOf(newArray[y]) === -1){
-              array2.push(newArray[y]);
-            }
-          }
-        }
-        return array2;
-      };
-
       it('should return all unique values contained in an unsorted array', function() {
         var numbers = [1, 2, 1, 3, 1, 4];
 
@@ -280,15 +204,6 @@
     });
 
     describe('map', function() {
-
-      _.map = function(newArray, newFunc){
-        var array2 = [],
-            count = newArray.length;
-        for (var x= 0; x < count; x++){
-          array2.push(newFunc(newArray[x]));
-        }
-        return array2;
-      };
       it('should apply a function to every value in an array', function() {
         var doubledNumbers = _.map([1, 2, 3], function(num) {
           return num * 2;
@@ -308,17 +223,17 @@
     });
 
     describe('pluck', function() {
-
-      _.pluck = function(newArray, newString){
-        var array2 = [],
-            count = newArray.length;
-        for (var x=0; x < count; x++){
-          if (newArray[x][newString] !== undefined){
-            array2.push(newArray[x][newString]);
-          }
-        }
-        return array2;
-      };
+      //
+      //_.pluck = function(newArray, newString){
+      //  var array2 = [],
+      //      count = newArray.length;
+      //  for (var x=0; x < count; x++){
+      //    if (newArray[x][newString] !== undefined){
+      //      array2.push(newArray[x][newString]);
+      //    }
+      //  }
+      //  return array2;
+      //};
 
       it('should return values contained at a user-defined property', function() {
         var people = [
@@ -342,29 +257,6 @@
     });
 
     describe('reduce', function() {
-
-      _.reduce = function(newArray, newFunc, index){
-        var newIndex = index;
-        var count = newArray.length;
-        if (newIndex === undefined){
-          newIndex = 0;
-        }
-        var value;
-        if(index === undefined){
-          value = newArray[newIndex];
-          for(var x=newIndex+1; x < count; x++){
-            value = newFunc(value, newArray[x]);
-          }
-        }
-        else{
-          value = 0;
-          for(var y=newIndex; y < count; y++){
-            value = newFunc(value, newArray[y]);
-          }
-        }
-        return value;
-      };
-
       it('should be able to sum up an array', function() {
         var add = function(tally, item) {return tally + item; };
         var total = _.reduce([1, 2, 3], add, 0);
