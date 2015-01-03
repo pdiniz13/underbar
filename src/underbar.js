@@ -123,8 +123,15 @@
   _.uniq = function(newArray, bool, iterator){
     var array2 = [];
     var count = newArray.length;
-    var newBool = false;
-    if(bool === true){
+    if(bool !== true){
+      for (var y= 0; y < count; y++){
+        if(array2.indexOf(newArray[y]) === -1){
+          array2.push(newArray[y]);
+        }
+      }
+      return array2;
+    }
+    else{
       var newValue = -10000;
       for (var x = 0; x<count; x++){
         if(newArray[x] > newValue){
@@ -132,15 +139,8 @@
           array2.push(newValue);
         }
       }
+      return array2;
     }
-    else{
-      for (var y= 0; y < count; y++){
-        if(array2.indexOf(newArray[y]) === -1){
-          array2.push(newArray[y]);
-        }
-      }
-    }
-    return array2;
   };
 
 
@@ -363,6 +363,15 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
+    var oldArg;
+    var result;
+    return function() {
+      if(oldArg !== arguments){
+        result = func.apply(this, arguments);
+        oldArg = arguments;
+      }
+      return result;
+    };
   };
 
   // Delays a function for the given number of milliseconds, and then calls
@@ -372,6 +381,8 @@
   // parameter. For example _.delay(someFunction, 500, 'a', 'b') will
   // call someFunction('a', 'b') after 500ms
   _.delay = function(func, wait) {
+    var args = [].slice.call(arguments, 2);
+    return setTimeout(func,wait, args);
   };
 
 
@@ -386,6 +397,19 @@
     // input array. For a tip on how to make a copy of an array, see:
     // http://mdn.io/Array.prototype.slice
   _.shuffle = function(array) {
+    function getRandomInt(min, max) {
+      return Math.floor(Math.random() * (max - min)) + min;
+    }
+    var newArray = [];
+    var count = array.length;
+    for (var x = 0; x < count; x++){
+      var rand = getRandomInt(0, count);
+      while (newArray[rand] !== undefined){
+        rand = getRandomInt(0, count);
+      }
+      newArray[rand] = array[x];
+    }
+    return newArray;
   };
 
 
@@ -400,6 +424,7 @@
     // Calls the method named by functionOrKey on each value in the list.
     // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
+
   };
 
   // Sort the object's values by a criterion produced by an iterator.
