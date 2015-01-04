@@ -122,25 +122,35 @@
   // Produce a duplicate-free version of the array.
   _.uniq = function(newArray, bool, iterator){
     var array2 = [];
+    var newIterator;
     var count = newArray.length;
-    if(bool !== true){
-      for (var y= 0; y < count; y++){
+
+    if (iterator === undefined){
+      newIterator = function(value){return value;};
+    }
+    else{
+      newIterator = iterator;
+    }
+    if(bool){
+      var newValue = newIterator(newArray[0]);
+      array2.push(newArray[0]);
+      for (var x=1; x<count; x++){
+        var newValue2 = iterator(newArray[x]);
+        if(newValue2 !== newValue){
+          array2.push(newArray[x]);
+          newValue = iterator(newArray[x])
+        }
+      }
+    }
+    else{
+      array2.push(newArray[0]);
+      for(var y = 1; y < count; y++){
         if(array2.indexOf(newArray[y]) === -1){
           array2.push(newArray[y]);
         }
       }
-      return array2;
     }
-    else{
-      var newValue = -10000;
-      for (var x = 0; x<count; x++){
-        if(newArray[x] > newValue){
-          newValue = newArray[x];
-          array2.push(newValue);
-        }
-      }
-      return array2;
-    }
+    return array2;
   };
 
 
@@ -424,7 +434,7 @@
     // Calls the method named by functionOrKey on each value in the list.
     // Note: You will need to learn a bit about .apply to complete this.
   _.invoke = function(collection, functionOrKey, args) {
-
+    functionOrKey.apply(collection);
   };
 
   // Sort the object's values by a criterion produced by an iterator.
