@@ -124,13 +124,19 @@
     var array2 = [];
     var newIterator;
     var count = newArray.length;
+    var inArray = function(array, value){
+      for (var i = 0, count1 = array.length; i < count1; i++){
+        if(array[i] === value){
+          return true;
+        }
+        return false;
+      }
+    };
 
-    if (iterator === undefined){
-      newIterator = function(value){return value;};
-    }
-    else{
+    if (iterator !== undefined){
       newIterator = iterator;
     }
+
     if(bool){
       var newValue = newIterator(newArray[0]);
       array2.push(newArray[0]);
@@ -144,8 +150,8 @@
     }
     else{
       array2.push(newArray[0]);
-      for(var y = 1; y < count; y++){
-        if(array2.indexOf(newArray[y]) === -1){
+      for(var y = 0; y < count; y++){
+        if(!inArray(array2, newArray[y])){
           array2.push(newArray[y]);
         }
       }
@@ -375,9 +381,10 @@
   _.memoize = function(func) {
     var oldArg;
     var result;
+    var newFunc = func;
     return function() {
       if(oldArg !== arguments){
-        result = func.apply(this, arguments);
+        result = newFunc.apply(this, arguments);
         oldArg = arguments;
       }
       return result;
