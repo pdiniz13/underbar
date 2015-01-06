@@ -379,13 +379,13 @@
   // already computed the result for the given argument and return that value
   // instead if possible.
   _.memoize = function(func) {
-    var oldArg;
+    var oldArg = {};
     var result;
-    var newFunc = func;
     return function() {
-      if(oldArg !== arguments){
-        result = newFunc.apply(this, arguments);
-        oldArg = arguments;
+      var args = [].slice.call(arguments, 0,2);
+      if(oldArg === undefined || oldArg[0] !== args[0]){
+        result = func.apply(this, args);
+        oldArg[0] = args[0];
       }
       return result;
     };
